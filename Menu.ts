@@ -1,8 +1,23 @@
 import readlineSync = require('readline-sync');
 import { colors } from './src/util/Colors';
+import { Conta } from './src/model/Conta';
 
 export function main() {
     let opcao: number;
+
+    const conta1: Conta = new Conta(1, 123, 1, "Maristela", 10000);
+    conta1.visualizar();
+    conta1.sacar(10500);
+    conta1.visualizar();
+    conta1.depositar(5000);
+    conta1.visualizar();
+
+    const conta2: Conta = new Conta(2, 124, 2, "Maria Stela", 5000);
+    conta2.visualizar();
+    conta2.sacar(10500);
+    conta2.visualizar();
+    conta2.depositar(5000);
+    conta2.visualizar();
 
     while (true) {
         console.log(colors.bg.magentabright, colors.fg.whitestrong,
@@ -26,11 +41,12 @@ export function main() {
         console.log("                                                     ",
         colors.reset);
 
-        console.log("Entre com a opção desejada: ");
+        console.log(colors.fg.magentastrong,
+                    "Entre com a opção desejada: ", colors.reset);
         opcao = readlineSync.questionInt("");
 
         if (opcao == 9) {
-            console.log(colors.fg.crimson, "\nBanco Nullbank - Os melhores juros (para nos)!");
+            console.log(colors.fg.magentastrong, "\nBanco Nullbank - Os melhores juros (para nos)!");
             sobre();
             console.log(colors.reset, "");
             stop;
@@ -57,10 +73,12 @@ export function main() {
                 console.log(colors.fg.magentastrong,
                             "\n\nApagar uma Conta\n\n", colors.reset);
                 break;
+            
             case 6:
                 console.log(colors.fg.magentastrong,
-                            "\n\nSaque\n\n", colors.reset);
+                    "\n\nSaque\n\n", colors.reset);
                 break;
+            
             case 7:
                 console.log(colors.fg.magentastrong,
                             "\n\nDeposito\n\n", colors.reset);
@@ -83,6 +101,7 @@ export function sobre(): void {
     console.log("Projeto Desenvolvido por: ");
     console.log("Maristela Rocha - maristela.rocha.silva@gmail.com");
     console.log("https://github.com/maristelarochas/projeto-conta-bancaria");
+    console.log("Generation - Formacao de Pessoa Fullstack");
     console.log("*****************************************************");
 }
 

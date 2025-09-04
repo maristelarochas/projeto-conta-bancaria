@@ -25,13 +25,38 @@ export class ContaController implements ContaRepository {
             " foi criada com sucesso!", colors.reset);
     }
     atualizar(conta: Conta): void {
-        throw new Error("Method not implemented.");
+        let buscaConta = this.buscarNoArray(conta.numero);
+
+        if (buscaConta != null) {
+            this.listaContas[this.listaContas.indexOf(buscaConta)] = conta;
+            console.log(colors.fg.green, "\nA conta numero: " + conta.numero +
+                " foi atualizada com sucesso!", colors.reset);
+        } else
+            console.log(colors.fg.red, "\nA conta numero: " + conta.numero +
+                " nao foi encontrada!", colors.reset);
     }
     deletar(numero: number): void {
-        throw new Error("Method not implemented.");
+        let buscaConta = this.buscarNoArray(numero);
+
+        if (buscaConta != null) {
+            this.listaContas.splice(this.listaContas.indexOf(buscaConta), 1);
+            console.log(colors.fg.green, "\nA conta numero: " + numero +
+                " foi apagada com sucesso!", colors.reset);
+        } else {
+            console.log(colors.fg.red, "\nA conta numero: " + numero +
+                " nao foi encontrada!", colors.reset);
+        }
     }
     sacar(numero: number, valor: number): void {
-        throw new Error("Method not implemented.");
+        let conta = this.buscarNoArray(numero);
+
+        if (conta != null) {
+            if (conta.sacar(valor) == true)
+                console.log(colors.fg.green, "\nO saque na conta numero " + numero +
+                    " foi efetuado com sucesso!", colors.reset);
+        } else
+            console.log(colors.fg.red, "\nA conta numero: " + numero +
+                " nao foi encontrada!", colors.reset);
     }
     depositar(numero: number, valor: number): void {
         throw new Error("Method not implemented.");

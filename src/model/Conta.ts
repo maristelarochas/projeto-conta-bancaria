@@ -76,7 +76,7 @@ export abstract class Conta {
         console.log("*****************************************************");
         console.log("Numero da conta: " + this._numero);
         console.log("Agencia: " + this._agencia);
-        console.log("Tipo da conta: " + this.tipo);
+        console.log("Tipo da conta: " + tipo);
         console.log("Titular: " + this._titular);
         console.log("Saldo: " + this._saldo.toFixed(2));
         console.log("");

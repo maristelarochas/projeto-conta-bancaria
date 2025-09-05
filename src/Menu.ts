@@ -1,13 +1,13 @@
 import readlineSync = require('readline-sync');
 import { colors } from './util/Colors';
-import { Conta } from './model/Conta';
 import { ContaCorrente } from './model/ContaCorrente';
 import { ContaPoupanca } from './model/ContaPoupanca';
 import { ContaController } from './controller/ContaController';
 
 export function main() {
     let contas: ContaController = new ContaController();
-    let opcao: number, numero: number, agencia: number, tipo: number, saldo: number, limite: number, aniversario: number;
+    let opcao: number, numero: number, agencia: number, tipo: number, saldo: number, limite: number, aniversario: number, valor: number;
+    let numeroDestino: number;
     let titular: string;
     const tiposContas = ['Conta Corrente', 'Conta Poupanca'];
 
@@ -15,18 +15,14 @@ export function main() {
 
     let cc1: ContaCorrente = new ContaCorrente(contas.gerarNumero(), 123, 1, "Maristela", 1000, 100.0);
     contas.cadastrar(cc1);
-
     let cc2: ContaCorrente = new ContaCorrente(contas.gerarNumero(), 124, 1, "Maria Stela", 2000, 100.0);
     contas.cadastrar(cc2);
-
     let cp1: ContaPoupanca = new ContaPoupanca(contas.gerarNumero(), 125, 2, "Mari", 4000, 12);
     contas.cadastrar(cp1);
-
     let cp2: ContaPoupanca = new ContaPoupanca(contas.gerarNumero(), 125, 2, "Stela", 8000, 15);
     contas.cadastrar(cp2);
 
     contas.listarTodas();
-
 
     while (true) {
         console.log(colors.bg.magentabright, colors.fg.whitestrong,
@@ -47,11 +43,9 @@ export function main() {
         console.log("            9 - Sair                                 ");
         console.log("                                                     ");
         console.log("*****************************************************");
-        console.log("                                                     ",
-        colors.reset);
+        console.log("                                                     ", colors.reset);
 
-        console.log(colors.fg.magentastrong,
-                    "Entre com a opção desejada: ", colors.reset);
+        console.log(colors.fg.magentastrong, "Entre com a opção desejada: ", colors.reset);
         opcao = readlineSync.questionInt("");
 
         if (opcao == 9) {
@@ -81,14 +75,12 @@ export function main() {
                     case 1:
                         console.log("Digite o limite da conta: R$ ");
                         limite = readlineSync.questionFloat("");
-                        contas.cadastrar(
-                            new ContaCorrente(contas.gerarNumero(), agencia, tipo, titular, saldo, limite));
+                        contas.cadastrar(new ContaCorrente(contas.gerarNumero(), agencia, tipo, titular, saldo, limite));
                         break;
                     case 2:
                         console.log("Digite o dia do aniversario da conta poupanca: ");
                         aniversario = readlineSync.questionInt("");
-                        contas.cadastrar(new ContaPoupanca(contas.gerarNumero(), agencia, tipo, titular,
-                            saldo, aniversario));
+                        contas.cadastrar(new ContaPoupanca(contas.gerarNumero(), agencia, tipo, titular, saldo, aniversario));
                         break;
                 }
 
@@ -96,15 +88,13 @@ export function main() {
                 break;
             
             case 2:
-                console.log(colors.fg.magentastrong,
-                            "\n\nListar todas as contas\n\n", colors.reset);
+                console.log(colors.fg.magentastrong, "\n\nListar todas as contas\n\n", colors.reset);
                 contas.listarTodas();
                 
                 keyPress();
                 break;
             case 3:
-                console.log(colors.fg.magentastrong,
-                    "\n\nConsultar dados da Conta - por número\n\n", colors.reset);
+                console.log(colors.fg.magentastrong, "\n\nConsultar dados da Conta - por número\n\n", colors.reset);
                 
                 console.log("Digite o número da conta: ");
                 numero = readlineSync.questionInt("");
@@ -113,8 +103,7 @@ export function main() {
                 keyPress();
                 break;
             case 4:
-                console.log(colors.fg.magentastrong,
-                    "Atualizar dados da Conta\n\n", colors.reset);
+                console.log(colors.fg.magentastrong, "Atualizar dados da Conta\n\n", colors.reset);
                 
                 console.log("Digite o número da conta: ");
                 numero = readlineSync.questionInt("");
@@ -143,20 +132,17 @@ export function main() {
                         case 2:
                             console.log("Digite o dia do aniversario da conta poupanca: ");
                             aniversario = readlineSync.questionInt("");
-                            contas.atualizar(new ContaPoupanca(numero, agencia, tipo, titular, saldo,
-                                aniversario));
+                            contas.atualizar(new ContaPoupanca(numero, agencia, tipo, titular, saldo, aniversario));
                             break;
                     }
                 } else {
-                    console.log(colors.fg.red, "\nA conta numero: " + numero +
-                        " nao foi encontrada!", colors.reset);
+                    console.log(colors.fg.red, "\nA conta numero: " + numero + " nao foi encontrada!", colors.reset);
                 }
                 
                 keyPress();
                 break;
             case 5:
-                console.log(colors.fg.magentastrong,
-                    "\n\nApagar uma Conta\n\n", colors.reset);
+                console.log(colors.fg.magentastrong, "\n\nApagar uma Conta\n\n", colors.reset);
                 
                 console.log("Digite o numero da conta: ");
                 numero = readlineSync.questionInt("");
@@ -165,27 +151,52 @@ export function main() {
                 keyPress();
                 break;
             case 6:
-                console.log(colors.fg.magentastrong,
-                    "\n\nSaque\n\n", colors.reset);
+                console.log(colors.fg.magentastrong, "\n\nSaque\n\n", colors.reset);
                 
+                console.log("Digite o numero da conta: ");
+                numero = readlineSync.questionInt("");
+
+                console.log("\nDigite o valor do saque: R$ ");
+                valor = readlineSync.questionFloat("");
+
+                contas.sacar(numero, valor);
+
                 keyPress();    
                 break;
             
             case 7:
-                console.log(colors.fg.magentastrong,
-                            "\n\nDeposito\n\n", colors.reset);
+                console.log(colors.fg.magentastrong, "\n\nDeposito\n\n", colors.reset);
+
+                console.log("Digite o numero da conta: ");
+                numero = readlineSync.questionInt("");
+
+                console.log("\nDigite o valor do deposito: R$ ");
+                valor = readlineSync.questionFloat("");
+
+                contas.depositar(numero, valor);
+
                 keyPress();
                 break;
             
             case 8:
-                console.log(colors.fg.magentastrong,
-                            "\n\nTransferência entre contas\n\n", colors.reset);
+                console.log(colors.fg.magentastrong, "\n\nTransferência entre contas\n\n", colors.reset);
+
+                console.log("Digite o numero da conta de origem: ");
+                numero = readlineSync.questionInt("");
+
+                console.log("Digite o numero da conta de destino: ");
+                numeroDestino = readlineSync.questionInt("");
+
+                console.log("\nDigite o valor do deposito: R$ ");
+                valor = readlineSync.questionFloat("");
+
+                contas.transferir(numero, numeroDestino, valor);
+
                 keyPress();
                 break;
             
             default:
-                console.log(colors.fg.magentastrong,
-                    "\nOpcao invalida!\n", colors.reset);
+                console.log(colors.fg.magentastrong, "\nOpcao invalida!\n", colors.reset);
                 keyPress();
                 break;
         }
